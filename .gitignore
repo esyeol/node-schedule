@@ -1,0 +1,6 @@
+node_modules
+.vscode
+mariadb-data
+
+.env
+.DS_Store
