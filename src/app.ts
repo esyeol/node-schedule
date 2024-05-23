@@ -1,4 +1,4 @@
-import { createConnectionRDB } from './db/rdb.conn';
+import createConnectionRDB  from './db/rdb.conn';
 
 import express, { Express } from 'express';
 
@@ -35,12 +35,12 @@ if(process.env.NODE_ENV === 'production') {
   app.use(morgan('dev'));
 }
 
-try {
-  createConnectionRDB();
-  console.log('SUCCESS DB CONNECTION POOL');
-} catch (e) {
-  throw e;
-}
+// try {
+//   createConnectionRDB();
+//   console.log('SUCCESS DB CONNECTION POOL');
+// } catch (e) {
+//   throw e;
+// }
 
 
 // router
