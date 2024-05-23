@@ -8,7 +8,7 @@ import { ErrorRequestHandler,NextFunction, Request, Response } from 'express';
 const reserveValidator = [
   body('reserveTime')
   .notEmpty().withMessage('reserveTime field is required. Please provide a value.')
-  .isString().withMessage('reserveTime must be String')
+  .isISO8601().withMessage('reserveTime must be Date')
   .bail(),
 
   body('affiliation')
@@ -19,11 +19,6 @@ const reserveValidator = [
   body('option')
   .notEmpty().withMessage('option field is required. Please provide a value.')
   .isString().withMessage('option must be String')
-  .bail(),
-
-  body('type')
-  .notEmpty().withMessage('type field is required. Please provide a value.')
-  .isString().withMessage('type must be String')
   .bail(),
 
   (req: Request, res: Response, next: NextFunction) => {

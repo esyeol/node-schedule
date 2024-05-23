@@ -1,15 +1,17 @@
 import schedule from 'node-schedule';
 import axios from 'axios';
-import { ReservationDto } from '../services/dtos/reserve.dto';
+import ReservationModel from '../services/models/reserve.model';
+
 
 /**
  * 예약을 정의하는 함수
 */
-export const reserveDefine = async(reserveData: ReservationDto): Promise<boolean> => {
+export const reserveDefine = async(reserveData: ReservationModel): Promise<boolean> => {
   /**
    * node scheduler 등록 
    * 등록된 이후에 동작을 정의
    * */ 
+  console.log('reserveData', reserveData.reserveTime);
   const job = schedule.scheduleJob(`${reserveData.reserveTime}`, async () => {
     console.log('new reservation with schedule');    
     try {  
@@ -17,7 +19,6 @@ export const reserveDefine = async(reserveData: ReservationDto): Promise<boolean
         reserveTime: reserveData.reserveTime,
         affiliation: reserveData.affiliation,
         option: reserveData.option,
-        type: reserveData.type,
       });
       console.log('response data ->', response.data);
       return true;

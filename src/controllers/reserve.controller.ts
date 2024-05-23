@@ -1,7 +1,9 @@
+import { ReservationDto } from './../services/dtos/reserve.dto';
+import { body } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
 import statusCode from '../common/constant/status.code';
 import { reserveService } from '../services/reserve.service';
-import { ReservationDto } from '../services/dtos/reserve.dto';
+import ReservationModel from '../services/models/reserve.model';
 
 
 
@@ -16,14 +18,10 @@ class ReserveController {
     try {
       console.log('Reservation');
 
-      const reqBody: ReservationDto = {
-        reserveTime: req.body.reserveTime,
-        affiliation: req.body.affiliation,
-        type: req.body.type,
-        option: req.body.option
-      };
+      const reservationInfo:ReservationModel = req.body;
+      console.log('resreservationInfo -->',reservationInfo);
 
-      const rows = await reserveService.reservation(reqBody);
+      const rows = await reserveService.reservation(reservationInfo);
 
       return res.status(statusCode.OK).json({ success: true, message: 'success'});   
     } catch (error) {
@@ -35,7 +33,8 @@ class ReserveController {
    * */ 
   async reserveEvent(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('reqeust ->', req);
+      console.log('Call Back Reservation Event');
+      // console.log('reqeust ->', req);
     } catch (error) {
       console.error(`reservationEvent Controller Error -> ${error}`);
     }
