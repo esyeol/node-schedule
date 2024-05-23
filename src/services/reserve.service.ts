@@ -32,6 +32,9 @@ class ReserveService {
   /** reserveEvent consumer service */
   async reserveEvent() {
     try {
+      const getAllReserve = await reservationRepository.findAll({});
+      console.log('get all reserve ->', getAllReserve);
+      return getAllReserve;
       
     } catch (error) {
       console.error(error);

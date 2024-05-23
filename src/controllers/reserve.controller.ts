@@ -34,6 +34,11 @@ class ReserveController {
   async reserveEvent(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('Call Back Reservation Event');
+      const rows = await reserveService.reserveEvent();
+      if(rows) {
+        return res.status(statusCode.OK).json({ success: true, message: 'success', data:rows});   
+      }
+
       // console.log('reqeust ->', req);
     } catch (error) {
       console.error(`reservationEvent Controller Error -> ${error}`);

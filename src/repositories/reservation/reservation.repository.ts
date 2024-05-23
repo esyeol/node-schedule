@@ -38,9 +38,31 @@ class ReservationRepository implements IRserveRepository {
 
   /**
    * 전체 예약된 항목 조회 
+   * 학교, 예약 발송 유형
   */
-  async findAll(searchParams: { affiliation: string; option: string; }): Promise<ReservationModel[]> {
-    throw new Error('Method not implemented.');
+  async findAll(searchParams: { affiliation?: string; option?: string; type?:number; }): Promise<ReservationModel[]> {
+    
+    let conn; 
+    let query: string = `SELECT * FROM reservation`;
+    let condition: string[] = [];
+
+    try {
+      conn = await connection.getConnection();
+
+      if(searchParams.affiliation) condition.push(`affiliation = ${searchParams.affiliation}`);
+
+      if(searchParams.option) condition.push(`option = ${searchParams.option}`);
+
+      if(searchParams.type) condition.push('type = 0');
+      
+      if(condition.length) query +=  'WHERE' + condition.join('AND');
+
+      const [rows] = await conn.execute<ReservationModel[]>(query);
+      return rows;
+      
+    } catch (error) {
+      throw new Error('Method not implemented.');
+    }
   }
 
   /**
