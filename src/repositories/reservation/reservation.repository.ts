@@ -1,4 +1,5 @@
 import connection  from '../../db/rdb.conn';
+import moment from 'moment-timezone';
 
 import ReservationModel from '../../services/models/reserve.model';
 import { ResultSetHeader } from 'mysql2/promise';
@@ -38,9 +39,43 @@ class ReservationRepository implements IRserveRepository {
 
   /**
    * 전체 예약된 항목 조회 
+   * 학교, 예약 발송 유형
   */
-  async findAll(searchParams: { affiliation: string; option: string; }): Promise<ReservationModel[]> {
-    throw new Error('Method not implemented.');
+  async findAll(searchParams: { affiliation?: string; option?: string; type?:number; }): Promise<ReservationModel[]> {
+    
+    let conn; 
+    let query: string = `SELECT affiliation, option, reservation_time as reserveTime FROM reservation`;
+    let condition: string[] = [];
+    console.log('searchParams ->', searchParams);
+
+    try {
+      conn = await connection.getConnection();
+
+      if(searchParams.affiliation) condition.push(`affiliation = '${searchParams.affiliation}'`);
+
+      if(searchParams.option) condition.push(`option = '${searchParams.option}'`);
+
+      if(searchParams.type) condition.push('type = 0');
+      
+      if(condition.length) query +=  ' WHERE ' + condition.join(' AND ');
+
+      const [rows] = await conn.execute<ReservationModel[]>(query);
+       // 예약 시간 KST로 변환
+       // 예약 시간 KST로 변환하고 Date 객체로 반환
+      const transformedRows = rows.map(row => {
+        return {
+          ...row,
+          reserveTime: moment.tz(row.reserveTime, 'Asia/Seoul').toDate()
+        };
+      });
+
+      return transformedRows;
+      // return rows;
+      
+    } catch (error) {
+      console.error('Error -> ',error);
+      throw new Error();
+    }
   }
 
   /**
