@@ -34,7 +34,11 @@ class ReserveController {
   async reserveEvent(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('Call Back Reservation Event');
-      const rows = await reserveService.reserveEvent();
+
+      const reqBody:ReservationDto = req.body;
+      console.log('reqBody -->', reqBody);
+      const rows = await reserveService.reserveEvent(reqBody);
+
       if(rows) {
         return res.status(statusCode.OK).json({ success: true, message: 'success', data:rows});   
       }

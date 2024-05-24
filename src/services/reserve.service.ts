@@ -1,6 +1,7 @@
 import { reserveDefine } from '../modules/reserve.define';
 
 import reservationRepository from '../repositories/reservation/reservation.repository';
+import { ReservationDto } from './dtos/reserve.dto';
 import ReservationModel from './models/reserve.model';
 
 /**
@@ -30,9 +31,10 @@ class ReserveService {
   }
 
   /** reserveEvent consumer service */
-  async reserveEvent() {
+  async reserveEvent(reqBody: ReservationDto) {
     try {
-      const getAllReserve = await reservationRepository.findAll({});
+      console.log('reqbody ->', reqBody);
+      const getAllReserve = await reservationRepository.findAll(reqBody);
       console.log('get all reserve ->', getAllReserve);
       return getAllReserve;
       
